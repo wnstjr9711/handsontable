@@ -48,12 +48,8 @@ function UndoRedo(instance) {
       return;
     }
 
-    const originalData = plugin.instance.getSourceDataArray();
-    const rowIndex = (originalData.length + index) % originalData.length;
-    const physicalRowIndex = instance.toPhysicalRow(rowIndex);
-    const removedData = deepClone(originalData.slice(physicalRowIndex, physicalRowIndex + amount));
-
-    plugin.done(new UndoRedo.RemoveRowAction(rowIndex, removedData));
+    const removedData = deepClone(plugin.instance.getSourceDataArray(index, 0, index + amount - 1, instance.countCols() - 1));
+    plugin.done(new UndoRedo.RemoveRowAction(index, removedData));
   });
 
   instance.addHook('afterCreateCol', (index, amount, source) => {
